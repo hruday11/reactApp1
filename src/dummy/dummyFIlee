@@ -1,0 +1,49 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import getSchoolsList from '../Actions/Index'; 
+import ReactDataGrid from 'react-data-grid';
+
+class Home extends Component {
+
+  constructor(props){
+    super(props);
+  }
+  componentDidMount(){
+    this.props.getSchoolsList()
+  }
+    render() {
+      const columns = [{ key: 'id', name: 'ID' }, { key: 'name', name: 'School Name' }];
+      const rows = this.props.StateData?this.props.StateData.data:[];
+      const rowGetter = rowNumber => rows[rowNumber];
+      const {loading, StateData} = this.props;
+       if (loading) {
+      return <div>Loading...</div>;
+       }
+    return (
+      <div>
+        <ReactDataGrid
+        columns={columns}
+        rowGetter={rowGetter}
+        rowsCount={rows.length}
+        minHeight={500} />
+        {console.log(this.props.stateData)}
+        <ul>
+        {this.props.StateData?this.props.StateData.data.map(school =>
+          <li key={school.id}>{school.name}</li>
+        ):null}
+      </ul>
+      <h1>Hello World!</h1>
+      </div>
+    );
+    }
+}
+
+function mapStateToProps(state){
+  return{
+    stateData:state.login.schools,
+    loading: state.login.loading,
+  };
+  
+};  
+
+export default connect(mapStateToProps, {getSchoolsList})(Home);

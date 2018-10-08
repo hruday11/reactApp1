@@ -1,0 +1,43 @@
+import React, { Component } from 'react';
+import './App.css';
+import { connect } from 'react-redux';
+import Login from './Actions/Index';
+
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount = () =>{
+    this.props.Login();
+  }
+
+ 
+
+  render() {
+    const {loading, StateData} = this.props;
+
+    if (loading) {
+      {console.log(loading)}
+      return <div>Loading...</div>;
+    }
+    return (
+      <div>
+        {console.log(StateData)}
+         <ul>
+        {StateData?StateData.data.map(product =>
+          <li key={product.id}>{product.title}</li>
+        ):null}
+      </ul>
+      <h1>Hello World!</h1>
+      </div>
+    );
+    }  }
+
+const mapStateToProps = state => ({
+  StateData: state.login.items,
+  loading: state.login.loading,
+});  
+
+export default connect(mapStateToProps, {Login})(App);
